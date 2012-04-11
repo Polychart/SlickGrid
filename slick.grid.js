@@ -448,13 +448,21 @@ if (typeof Slick === "undefined") {
         var m = columns[i] = $.extend({}, columnDefaults, columns[i]);
         columnsById[m.id] = i;
 
-        var header = $("<div class='ui-state-default slick-header-column' id='" + uid + m.id + "' />")
+        // Polychart fork - add custom function generators.
+        var header;
+        if (options.headerFactory) {
+          header = options.headerFactory(m);
+        } else {
+          header = $("<div class='ui-state-default slick-header-column'/>")
             .html("<span class='slick-column-name'>" + m.name + "</span>")
-            .width(m.width - headerColumnWidthDiff)
             .attr("title", m.toolTip || m.name || "")
-            .data("fieldId", m.id)
-            .addClass(m.headerCssClass || "")
-            .appendTo($headers);
+        }
+        header
+          .width(m.width - headerColumnWidthDiff)
+          .attr("id", uid + m.id)
+          .data("fieldId", m.id)
+          .addClass(m.headerCssClass || "")
+          .appendTo($headers);
 
         if (options.enableColumnReorder || m.sortable) {
           header.hover(hoverBegin, hoverEnd);
