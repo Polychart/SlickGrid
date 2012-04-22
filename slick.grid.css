@@ -5,6 +5,21 @@ No built-in (selected, editable, highlight, flashing, invalid, loading, :focus) 
 classes should alter those!
 */
 
+/** Polychart */
+.slick-footer {
+  position: absolute;
+  bottom: 0px;
+}
+
+.slick-footer-columns, .slick-headerrow-columns {
+  width: 999999px;
+  position: relative;
+  white-space: nowrap;
+  cursor: default;
+  overflow: hidden;
+}
+/** End of polychart */
+
 .slick-header.ui-state-default, .slick-headerrow.ui-state-default {
   width: 100%;
   overflow: hidden;

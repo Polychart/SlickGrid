@@ -84,7 +84,12 @@ if (typeof Slick === "undefined") {
       dataItemColumnValueExtractor: null,
       fullWidthRows: false,
       multiColumnSort: false,
-      defaultFormatter: defaultFormatter
+      defaultFormatter: defaultFormatter,
+      // [polychart]
+      headerFactory: null,
+      footerFactory: null,
+      showFooter: false
+      // [/polychart]
     };
 
     var columnDefaults = {
@@ -115,6 +120,10 @@ if (typeof Slick === "undefined") {
     var $headerScroller;
     var $headers;
     var $headerRow, $headerRowScroller;
+    // [polychart] footer related code.
+    var $footerScroller;
+    var $footerse;
+    // [/polychart]
     var $topPanelScroller;
     var $topPanel;
     var $viewport;
@@ -214,6 +223,13 @@ if (typeof Slick === "undefined") {
       $headerRowScroller = $("<div class='slick-headerrow ui-state-default' style='overflow:hidden;position:relative;' />").appendTo($container);
       $headerRow = $("<div class='slick-headerrow-columns' />").appendTo($headerRowScroller);
 
+      // [polychart]
+      if (options.showFooter) {
+        $footerScroller = $("<div class='slick-footer ui-state-default' style='overflow:hidden;' />").appendTo($container);
+        $footers = $("<div class='slick-footer-columns' style='width:10000px; left:-1000px' />").appendTo($footerScroller);
+      }
+      // [/polychart]
+
       $topPanelScroller = $("<div class='slick-top-panel-scroller ui-state-default' style='overflow:hidden;position:relative;' />").appendTo($container);
       $topPanel = $("<div class='slick-top-panel' style='width:10000px' />").appendTo($topPanelScroller);
 
@@ -261,6 +277,11 @@ if (typeof Slick === "undefined") {
         }
 
         createColumnHeaders();
+        // [polychart]
+        if (options.showFooter) {
+          createColumnFooters();
+        }
+        // [/polychart]
         setupColumnSort();
         createCssRules();
         resizeCanvas();
@@ -430,6 +451,54 @@ if (typeof Slick === "undefined") {
       var $header = $headerRow.children().eq(idx);
       return $header && $header[0];
     }
+
+    // [polychart]
+    function createColumnFooters() {
+      function hoverBegin() { $(this).addClass("ui-state-hover"); }
+
+      function hoverEnd() { $(this).removeClass("ui-state-hover"); }
+
+      $footers.empty();
+      columnsById = {};
+
+      for (var i = 0; i < columns.length; i++) {
+        var m = columns[i] = $.extend({}, columnDefaults, columns[i]);
+        columnsById[m.id] = i;
+
+        // Polychart fork - add custom function generators.
+        var footer;
+        if (options.footerFactory) {
+          footer = options.footerFactory(m);
+        } else {
+          footer = $("<div class='ui-state-default slick-header-column'/>")
+            .html("<span class='slick-column-name'>" + m.name + "</span>")
+            .attr("title", m.toolTip || m.name || "")
+        }
+        footer
+          .width(m.width - headerColumnWidthDiff)
+          .attr("id", uid + m.id)
+          .data("fieldId", m.id)
+          .addClass(m.headerCssClass || "")
+          .appendTo($footers);
+
+        if (options.enableColumnReorder || m.sortable) {
+          footer.hover(hoverBegin, hoverEnd);
+        }
+
+        if (m.sortable) {
+          footer.append("<span class='slick-sort-indicator' />");
+        }
+      }
+
+      /*
+      setSortColumns(sortColumns);
+      setupColumnResize();
+      if (options.enableColumnReorder) {
+        setupColumnReorder();
+      }
+      */
+    }
+    // [/polychart]
 
     function createColumnHeaders() {
       function hoverBegin() {
@@ -746,9 +815,21 @@ if (typeof Slick === "undefined") {
             .bind("dragend", function (e, dd) {
               var newWidth;
               $(this).parent().removeClass("slick-header-column-active");
+              // [polychart]
+              var footerElements;
+              if (options.showFooter) {
+                footerElements = $footers.children();
+              }
+              // [/polychart]
               for (j = 0; j < columnElements.length; j++) {
                 c = columns[j];
                 newWidth = $(columnElements[j]).outerWidth();
+                // [polychart]
+                if (options.showFooter) {
+                  var newRawWidth = $(columnElements[j]).width();
+                  $(footerElements[j]).css('width', newRawWidth);
+                }
+                // [/polychart]
 
                 if (c.previousWidth !== newWidth && c.rerenderOnResize) {
                   invalidateAllRows();
@@ -1069,6 +1150,11 @@ if (typeof Slick === "undefined") {
       if (initialized) {
         invalidateAllRows();
         createColumnHeaders();
+        // [polychart]
+        if (options.showFooter) {
+          createColumnFooters();
+        }
+        // [/polychart]
         removeCssRules();
         createCssRules();
         resizeCanvas();
@@ -1361,8 +1447,17 @@ if (typeof Slick === "undefined") {
     }
 
     function getViewportHeight() {
+      // [polychart]
+      var footerHeight = 0;
+      if (options.showFooter) {
+        footerHeight = parseFloat($.css($footerScroller[0], "height")) + getVBoxDelta($footerScroller);
+      }
+      // [/polychart]
       return parseFloat($.css($container[0], "height", true)) -
           parseFloat($.css($headerScroller[0], "height")) - getVBoxDelta($headerScroller) -
+          // [polychart]
+          footerHeight -
+          // [/polychart]
           (options.showTopPanel ? options.topPanelHeight + getVBoxDelta($topPanelScroller) : 0) -
           (options.showHeaderRow ? options.headerRowHeight + getVBoxDelta($headerRowScroller) : 0);
     }
