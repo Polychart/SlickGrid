@@ -465,7 +465,7 @@ if (typeof Slick === "undefined") {
       columnsById = {};
 
       for (var i = 0; i < columns.length; i++) {
-        var m = columns[i] = $.extend({}, columnDefaults, columns[i]);
+        var m = columns[i] = $.extend(columns[i], columnDefaults);
         columnsById[m.id] = i;
 
         // Polychart fork - add custom function generators.
@@ -517,7 +517,7 @@ if (typeof Slick === "undefined") {
       columnsById = {};
 
       for (var i = 0; i < columns.length; i++) {
-        var m = columns[i] = $.extend({}, columnDefaults, columns[i]);
+        var m = columns[i] = $.extend(columns[i], columnDefaults);
         columnsById[m.id] = i;
 
         // Polychart fork - add custom function generators.
