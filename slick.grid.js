@@ -224,13 +224,6 @@ if (typeof Slick === "undefined") {
       $headerRowScroller = $("<div class='slick-headerrow ui-state-default' style='overflow:hidden;position:relative;' />").appendTo($container);
       $headerRow = $("<div class='slick-headerrow-columns' />").appendTo($headerRowScroller);
 
-      // [polychart]
-      if (options.showFooter) {
-        $footerScroller = $("<div class='slick-footer ui-state-default' style='overflow:hidden;' />").appendTo($container);
-        $footers = $("<div class='slick-footer-columns' style='width:10000px; left:-1000px' />").appendTo($footerScroller);
-      }
-      // [/polychart]
-
       $topPanelScroller = $("<div class='slick-top-panel-scroller ui-state-default' style='overflow:hidden;position:relative;' />").appendTo($container);
       $topPanel = $("<div class='slick-top-panel' style='width:10000px' />").appendTo($topPanelScroller);
 
@@ -245,6 +238,13 @@ if (typeof Slick === "undefined") {
       $viewport = $("<div class='slick-viewport' style='width:100%;overflow:auto;outline:0;position:relative;;'>").appendTo($container);
       $viewport.css("overflow-y", options.autoHeight ? "hidden" : "auto");
 
+
+      // [polychart]
+      if (options.showFooter) {
+        $footerScroller = $("<div class='slick-footer ui-state-default' style='overflow:hidden;position:relative' />").appendTo($container);
+        $footers = $("<div class='slick-footer-columns' style='width:10000px; left:-1000px' />").appendTo($footerScroller);
+      }
+      // [/polychart]
       $canvas = $("<div class='grid-canvas' />").appendTo($viewport);
 
       if (!options.explicitInitialization) {
@@ -1668,6 +1668,7 @@ if (typeof Slick === "undefined") {
       if (scrollLeft !== prevScrollLeft) {
         prevScrollLeft = scrollLeft;
         $headerScroller[0].scrollLeft = scrollLeft;
+        $footerScroller[0].scrollLeft = scrollLeft;
         $topPanelScroller[0].scrollLeft = scrollLeft;
         $headerRowScroller[0].scrollLeft = scrollLeft;
       }
