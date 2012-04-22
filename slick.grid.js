@@ -465,7 +465,7 @@ if (typeof Slick === "undefined") {
       columnsById = {};
 
       for (var i = 0; i < columns.length; i++) {
-        var m = columns[i] = $.extend(columns[i], columnDefaults);
+        var m = columns[i] = setDefaults(columns[i], columnDefaults);
         columnsById[m.id] = i;
 
         // Polychart fork - add custom function generators.
@@ -503,6 +503,13 @@ if (typeof Slick === "undefined") {
     }
     // [/polychart]
 
+    function setDefaults(obj, source) {
+      for (var prop in source) {
+        if (obj[prop] == null) obj[prop] = source[prop];
+      }
+      return obj;
+    }
+
     function createColumnHeaders() {
       function hoverBegin() {
         $(this).addClass("ui-state-hover");
@@ -517,7 +524,7 @@ if (typeof Slick === "undefined") {
       columnsById = {};
 
       for (var i = 0; i < columns.length; i++) {
-        var m = columns[i] = $.extend(columns[i], columnDefaults);
+        var m = columns[i] = setDefaults(columns[i], columnDefaults);
         columnsById[m.id] = i;
 
         // Polychart fork - add custom function generators.
