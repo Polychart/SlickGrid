@@ -1,4 +1,5 @@
 /***
+ * 
  * Contains basic SlickGrid editors.
  * @module Editors
  * @namespace Slick
