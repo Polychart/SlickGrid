@@ -49,6 +49,22 @@ classes should alter those!
   float: left;
 }
 
+.slick-header-column.slick-header-synthetic {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  height: 24px; /* 16 + 4 * 2 */
+  line-height: 16px;
+  margin: 0;
+  /* padding: 4px; */
+  /* border-right: 1px solid silver; */
+  border-left: 0px;
+  border-top: 0px;
+  border-bottom: 0px;
+  float: left;
+}
+
 .slick-headerrow-column.ui-state-default {
   padding: 4px;
 }
