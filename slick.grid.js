@@ -436,7 +436,7 @@ if (typeof Slick === "undefined") {
     function updateColumnHeader(columnId, title, toolTip) {
       if (!initialized) { return; }
       var idx = getColumnIndex(columnId);
-      var $header = $headers.children().eq(idx);
+      var $header = getColumnElements().eq(idx);
       if ($header) {
         columns[idx].name = title;
         columns[idx].toolTip = toolTip;
@@ -544,7 +544,7 @@ if (typeof Slick === "undefined") {
           .data("fieldId", m.id)
           .addClass(m.headerCssClass || "")
           .addClass('slick-header-column')
-          .addClass('slick-header-sortable')
+          .addClass('slick-header-actual')
           .appendTo($headers);
 
         if (options.enableColumnReorder || m.sortable) {
@@ -590,7 +590,7 @@ if (typeof Slick === "undefined") {
           return;
         }
 
-        var $col = $(e.target).closest(".slick-header-sortable");
+        var $col = $(e.target).closest(".slick-header-actual");
         if (!$col.length) {
           return;
         }
@@ -656,7 +656,7 @@ if (typeof Slick === "undefined") {
         helper: "clone",
         placeholder: "slick-sortable-placeholder ui-state-default slick-header-column",
         forcePlaceholderSize: true,
-        items: '.slick-header-sortable',
+        items: '.slick-header-actual',
         start: function (e, ui) {
           $(ui.helper).addClass("slick-header-column-active");
         },
@@ -683,9 +683,16 @@ if (typeof Slick === "undefined") {
       });
     }
 
+    // [polychart]
+    function getColumnElements() {
+      // returns the column headers DOMs.
+      return $headers.children('.slick-header-actual');
+    }
+    // [/polychart]
+
     function setupColumnResize() {
       var $col, j, c, pageX, columnElements, minPageX, maxPageX, firstResizable, lastResizable;
-      columnElements = $headers.children();
+      columnElements = getColumnElements();
       columnElements.find(".slick-resizable-handle").remove();
       columnElements.each(function (i, e) {
         if (columns[i].resizable) {
@@ -1089,7 +1096,7 @@ if (typeof Slick === "undefined") {
     function applyColumnHeaderWidths() {
       if (!initialized) { return; }
       var h;
-      for (var i = 0, headers = $headers.children(), ii = headers.length; i < ii; i++) {
+      for (var i = 0, headers = getColumnElements(), ii = headers.length; i < ii; i++) {
         h = $(headers[i]);
         if (h.width() !== columns[i].width - headerColumnWidthDiff) {
           h.width(columns[i].width - headerColumnWidthDiff);
@@ -1117,7 +1124,7 @@ if (typeof Slick === "undefined") {
     function setSortColumns(cols) {
       sortColumns = cols;
 
-      var headerColumnEls = $headers.children();
+      var headerColumnEls = getColumnElements();
       headerColumnEls
           .removeClass("slick-header-column-sorted")
           .find(".slick-sort-indicator")
