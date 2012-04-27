@@ -88,6 +88,7 @@ if (typeof Slick === "undefined") {
       // [polychart]
       headerFactory: null,
       footerFactory: null,
+      extraColumnFactory: null,
       showFooter: false
       // [/polychart]
     };
@@ -473,7 +474,7 @@ if (typeof Slick === "undefined") {
         if (options.footerFactory) {
           footer = options.footerFactory(m);
         } else {
-          footer = $("<div class='ui-state-default slick-header-column'/>")
+          footer = $("<div class='ui-state-default'/>")
             .html("<span class='slick-column-name'>" + m.name + "</span>")
             .attr("title", m.toolTip || m.name || "")
         }
@@ -482,6 +483,7 @@ if (typeof Slick === "undefined") {
           .attr("id", uid + m.id)
           .data("fieldId", m.id)
           .addClass(m.headerCssClass || "")
+          .addClass('slick-header-column')
           .appendTo($footers);
 
         if (options.enableColumnReorder || m.sortable) {
@@ -532,7 +534,7 @@ if (typeof Slick === "undefined") {
         if (options.headerFactory) {
           header = options.headerFactory(m);
         } else {
-          header = $("<div class='ui-state-default slick-header-column'/>")
+          header = $("<div class='ui-state-default'/>")
             .html("<span class='slick-column-name'>" + m.name + "</span>")
             .attr("title", m.toolTip || m.name || "")
         }
@@ -541,6 +543,8 @@ if (typeof Slick === "undefined") {
           .attr("id", uid + m.id)
           .data("fieldId", m.id)
           .addClass(m.headerCssClass || "")
+          .addClass('slick-header-column')
+          .addClass('slick-header-sortable')
           .appendTo($headers);
 
         if (options.enableColumnReorder || m.sortable) {
@@ -568,6 +572,13 @@ if (typeof Slick === "undefined") {
       if (options.enableColumnReorder) {
         setupColumnReorder();
       }
+      // [polychart]
+      if (options.extraColumnFactory) {
+        $headers.append(
+          $(options.extraColumnFactory()).addClass('slick-header-column')
+        );
+      }
+      // [/polychart]
     }
 
     function setupColumnSort() {
@@ -579,7 +590,7 @@ if (typeof Slick === "undefined") {
           return;
         }
 
-        var $col = $(e.target).closest(".slick-header-column");
+        var $col = $(e.target).closest(".slick-header-sortable");
         if (!$col.length) {
           return;
         }
@@ -645,6 +656,7 @@ if (typeof Slick === "undefined") {
         helper: "clone",
         placeholder: "slick-sortable-placeholder ui-state-default slick-header-column",
         forcePlaceholderSize: true,
+        items: '.slick-header-sortable',
         start: function (e, ui) {
           $(ui.helper).addClass("slick-header-column-active");
         },
