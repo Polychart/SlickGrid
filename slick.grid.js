@@ -1175,6 +1175,7 @@ if (typeof Slick === "undefined") {
     }
 
     function setColumns(columnDefinitions) {
+      trigger(self.onSetColumns, {old:columns,new:columnDefinitions});
       columns = columnDefinitions;
       if (initialized) {
         invalidateAllRows();
@@ -2867,6 +2868,8 @@ if (typeof Slick === "undefined") {
       "onDragEnd": new Slick.Event(),
       "onSelectedRowsChanged": new Slick.Event(),
       "onCellCssStylesChanged": new Slick.Event(),
+      // [polychart] Events
+      "onSetColumns": new Slick.Event(),
 
       // Methods
       "registerPlugin": registerPlugin,
