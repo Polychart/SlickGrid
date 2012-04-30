@@ -54,7 +54,7 @@ classes should alter those!
   display: inline-block;
   overflow: hidden;
   text-overflow: ellipsis;
-  height: 24px; /* 16 + 4 * 2 */
+  height: 26px; /* 16 (real height) + 4 * 2 (lack of padding) + 1 * 2 (lack of border) */
   line-height: 16px;
   margin: 0;
   /* padding: 4px; */
