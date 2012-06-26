@@ -1175,7 +1175,7 @@ if (typeof Slick === "undefined") {
     }
 
     function setColumns(columnDefinitions) {
-      trigger(self.onSetColumns, {old:columns,new:columnDefinitions});
+      trigger(self.onSetColumns, {oldColumns:columns,newColumns:columnDefinitions});
       columns = columnDefinitions;
       if (initialized) {
         invalidateAllRows();
