@@ -89,7 +89,8 @@ if (typeof Slick === "undefined") {
       headerFactory: null,
       footerFactory: null,
       extraColumnFactory: null,
-      showFooter: false
+      showFooter: false,
+      additionalWidth: 0
       // [/polychart]
     };
 
@@ -365,6 +366,7 @@ if (typeof Slick === "undefined") {
     function getCanvasWidth() {
       var availableWidth = viewportHasVScroll ? viewportW - scrollbarDimensions.width : viewportW;
       var rowWidth = 0;
+      rowWidth += options.additionalWidth;
       var i = columns.length;
       while (i--) {
         rowWidth += (columns[i].width || columnDefaults.width);
